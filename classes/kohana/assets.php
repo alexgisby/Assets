@@ -1,5 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
+require_once Kohana::find_file('vendor', 'jshrink.class');
+
 /**
  * Assets Class. This class will automatically combine and minify CSS and Javascript files.
  *
@@ -80,6 +82,7 @@ class Kohana_Assets
 		//
 		
 		$combined = $this->stitch_files();
+		$combined['js'] = JShrink::minify($combined['js']);
 		print_r($combined);
 	}
 	
