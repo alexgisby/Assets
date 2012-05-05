@@ -90,8 +90,8 @@ class Kohana_Assets
 
 		// Check the cache:
 		self::check_cache_dir();
-		// if(!file_exists($fullpath))
-		// {
+		if(!file_exists($fullpath))
+		{
 			// Doesn't exist, COMPILE ME BABY!
 			$compiler_class = 'Compiler_' . $this->config->css['compiler'];
 			$compiler = new $compiler_class();
@@ -103,7 +103,7 @@ class Kohana_Assets
 			$compiler->set_options(arr::merge($this->config->css['compiler_args'], $options));
 			
 			$compiler->compile($fullpath);
-		// }
+		}
 		
 		return $filename;
 	}
@@ -123,6 +123,17 @@ class Kohana_Assets
 		return sha1(time()) . '.min.js';
 	}
 	
+	
+	/**
+	 * Returns the URL for accessing an asset
+	 *
+	 * @param 	string 	Filename of compressed asset
+	 * @return 	string 	Full URL of asset
+	 */
+	public function url_for_asset($asset_filename)
+	{
+		return Route::get('module-assets')->uri(array('asset_filename' => $asset_filename));
+	}
 	
 	
 	/**
