@@ -72,39 +72,5 @@ class Kohana_Assets
 		}
 	}
 	
-	/**
-	 * Builds the files
-	 */
-	public function build()
-	{
-		//
-		// Step1:  Stitch the files together:
-		//
-		
-		$combined = $this->stitch_files();
-		$combined['js'] = JShrink::minify($combined['js']);
-		print_r($combined);
-	}
-	
-	
-	
-	/**
-	 * Pulls the related files from their locations and puts them into a single file.
-	 *
-	 * @return 	array 	JS and CSS strings in separate keys of the array.
-	 */
-	protected function stitch_files()
-	{
-		$css 	= '';
-		$js 	= '';
-		
-		foreach($this->css as $f)
-			$css .= file_get_contents($this->config->css_filesystem_basepath . '/' . $f) . PHP_EOL;
-		
-		foreach($this->js as $f)
-			$js .= file_get_contents($this->config->js_filesystem_basepath . '/' . $f) . PHP_EOL;
-			
-		return array('css' => $css, 'js' => $js);
-	}
 	
 }
