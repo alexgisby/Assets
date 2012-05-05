@@ -49,6 +49,13 @@ return array(
 	 * Path to Closure compressor within a vendor/ folder.
 	 */
 	'closure_jar' => 'google_closure/compiler',
+	
+	/**
+	 * Cache Control options
+	 */
+	'cache_control' => array(
+		'max_age' 	=> 86400000,
+	),
 
 	// /**
 	//  * Filesystem base path for CSS files. This should be where you store the raw CSS files.
