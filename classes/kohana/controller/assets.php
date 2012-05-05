@@ -26,25 +26,33 @@ class Kohana_Controller_Assets extends Controller
 			throw new HTTP_Exception_404('Asset not found: ' . $filename);
 		}
 		
-		// Output the files contents, along with the right headers:
 		$pathinfo = pathinfo($path);
-		$headers = array(
-			'Cache-Control' => 'max-age=' . $config->cache_control['max_age'] . ', must-revalidate',
-			'Expires' 		=> 
-		);
+		
+		// Output the files contents, along with the right headers:
+		$expirytime = strtotime($config->cache_control[$pathinfo['extension']]);
+		$seconds	= $expirytime - time();
+		
+		$this->response->headers(array(
+			'Expires' 		=> gmdate('D, d M Y H:i:s \G\M\T', $expirytime),
+		));
 		
 		switch($pathinfo['extension'])
 		{
 			case 'css':
-				$headers['Content-Type'] = 'text/css';
+				$this->response->headers('Content-Type', 'text/css');
 			break;
 			
 			case 'js':
-				$headers['Content-Type'] = 'application/javascript';
+				$this->response->headers('Content-Type', 'application/javascript');
 			break;
 		}
 		
-		// print_r($pathinfo); exit;
-		// exit;
+		// print_r($headers);
+		
+		// $this->response->headers($headers);
+		
+		// print_r($this->response->headers()); exit;
+		
+		$this->response->body(file_get_contents($path));
 	}
 }

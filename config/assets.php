@@ -54,7 +54,11 @@ return array(
 	 * Cache Control options
 	 */
 	'cache_control' => array(
-		'max_age' 	=> 86400000,
+		/**
+		 * Set a strtotime() friendly string for how far in the future content should be cached for.
+		 */
+		'css' 	=> '+1 year',
+		'js' 	=> '+1 year',
 	),
 
 	// /**
