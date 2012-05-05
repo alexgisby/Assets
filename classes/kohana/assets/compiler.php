@@ -51,9 +51,31 @@ abstract class Kohana_Assets_Compiler
 	 */
 	
 	/**
+	 * @var 	string 	Path to the compiler executable
+	 */
+	protected $compiler_path;
+	
+	/**
 	 * @param 	array 	Compiler options.
 	 */
 	protected $options = array();
+	
+	/**
+	 * Sets the compiler path
+	 *
+	 * @param 	string 	Path to the compiler
+	 * @return 	this
+	 */
+	public function set_compiler_path($path)
+	{
+		$fullpath = kohana::find_file('vendor', $path, 'jar');
+		
+		if(!$fullpath)
+			throw new Kohana_Exception('Could not find compiler for: ' . $path);
+		
+		$this->compiler_path = $fullpath;
+		return $this;
+	}
 	
 	/**
 	 * Convert the files down into a single, compressed file.
@@ -97,5 +119,21 @@ abstract class Kohana_Assets_Compiler
 			$this->set_option($name, $value);
 		
 		return $this;
+	}
+	
+	/**
+	 * Compiles the options down into a nice string to pass to a jar file
+	 *
+	 * @return 	string
+	 */
+	protected function compile_options()
+	{
+		$string = '';
+		foreach($this->options as $k => $v)
+		{
+			$string .= $k . ' ' . $v . ' ';
+		}
+		
+		return trim($string);
 	}
 }

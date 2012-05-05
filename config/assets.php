@@ -17,10 +17,10 @@ return array(
 		'compiler' => 'yui',
 		
 		/**
-		 * Default compiler arguments
+		 * Default compiler arguments (YUI)
 		 */
 		'compiler_args' => array(
-			
+
 		),
 	),
 	
@@ -39,6 +39,16 @@ return array(
 		'compiler' => 'closure',
 	),
 	
+	
+	/**
+	 * Path to YUI compressor within a vendor/ folder.
+	 */
+	'yui_jar' => 'yui/build/yuicompressor-2.4.7',
+	
+	/**
+	 * Path to Closure compressor within a vendor/ folder.
+	 */
+	'closure_jar' => 'google_closure/compiler',
 
 	// /**
 	//  * Filesystem base path for CSS files. This should be where you store the raw CSS files.

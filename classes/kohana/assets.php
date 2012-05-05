@@ -78,12 +78,6 @@ class Kohana_Assets
 	 */
 	public function compile_css(array $options = array())
 	{
-		$compiler_class = 'Compiler_' . $this->config->css['compiler'];
-		$compiler = new $compiler_class();
-		
-		$compiler->add_files($this->css);
-		$compiler->set_options(arr::merge($this->config->css['compiler_args'], $options));
-		
 		// Generate a filename for this lot:
 		$filename = '';
 		foreach($this->css as $file)
@@ -92,6 +86,24 @@ class Kohana_Assets
 		}
 		
 		$filename = sha1($filename) . '.min.css';
+		$fullpath = self::cache_dir() . '/' . $filename;
+
+		// Check the cache:
+		self::check_cache_dir();
+		// if(!file_exists($fullpath))
+		// {
+			// Doesn't exist, COMPILE ME BABY!
+			$compiler_class = 'Compiler_' . $this->config->css['compiler'];
+			$compiler = new $compiler_class();
+			
+			$c_jar = $this->config->css['compiler'] . '_jar';
+			$compiler->set_compiler_path($this->config->$c_jar);
+
+			$compiler->add_files($this->css);
+			$compiler->set_options(arr::merge($this->config->css['compiler_args'], $options));
+			
+			$compiler->compile($fullpath);
+		// }
 		
 		return $filename;
 	}
@@ -109,6 +121,43 @@ class Kohana_Assets
 		$compiler->add_files($this->js);
 		
 		return sha1(time()) . '.min.js';
+	}
+	
+	
+	
+	/**
+	 * --------------------- Caching ------------------------------
+	 */
+	
+	/**
+	 * Returns the cache directory
+	 *
+	 * @return 	string
+	 */
+	public static function cache_dir()
+	{
+		return kohana::$cache_dir . '/assets';
+	}
+	
+	/**
+	 * Checks that the cache dir is present and writeable
+	 *
+	 * @return 	bool
+	 */
+	public static function check_cache_dir()
+	{
+		if(!file_exists(self::cache_dir()))
+		{
+			mkdir(self::cache_dir(), 0777);
+			chmod(self::cache_dir(), 0777);
+		}
+		
+		if(!is_writable(self::cache_dir()))
+		{
+			chmod(self::cache_dir(), 0777);
+		}
+		
+		return file_exists(self::cache_dir()) && is_writable(self::cache_dir());
 	}
 	
 }
