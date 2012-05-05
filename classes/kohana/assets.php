@@ -53,17 +53,17 @@ class Kohana_Assets
 			{
 				case 'css':
 					// Check the file exists:
-					if(file_exists($this->config->css_filesystem_basepath . '/' . $f))
+					if(file_exists($this->config->css['filesystem_path'] . '/' . $f))
 					{
-						$this->css[] = $f;
+						$this->css[] = $this->config->css['filesystem_path'] . '/'. $f;
 					}
 				break;
 				
 				case 'js':
 					// Check the file exists:
-					if(file_exists($this->config->js_filesystem_basepath . '/' . $f))
+					if(file_exists($this->config->js['filesystem_path'] . '/' . $f))
 					{
-						$this->js[] = $f;
+						$this->js[] = $this->config->js['filesystem_path'] . '/'. $f;
 					}
 				break;
 			}
@@ -73,11 +73,27 @@ class Kohana_Assets
 	/**
 	 * Compile the CSS files and return the filename of the output.
 	 *
+	 * @param 	array 	Options for the compiler. Overrides those in the config file.
 	 * @return 	string 	Filename of the output css.
 	 */
-	public function compile_css()
+	public function compile_css(array $options = array())
 	{
-		return sha1(time()) . '.min.css';
+		$compiler_class = 'Compiler_' . $this->config->css['compiler'];
+		$compiler = new $compiler_class();
+		
+		$compiler->add_files($this->css);
+		$compiler->set_options(arr::merge($this->config->css['compiler_args'], $options));
+		
+		// Generate a filename for this lot:
+		$filename = '';
+		foreach($this->css as $file)
+		{
+			$filename .= $file . '--' . @filemtime($file);
+		}
+		
+		$filename = sha1($filename) . '.min.css';
+		
+		return $filename;
 	}
 	
 	/**
@@ -87,6 +103,11 @@ class Kohana_Assets
 	 */
 	public function compile_js()
 	{
+		$compiler_class = 'Compiler_' . $this->config->css['compiler'];
+		$compiler = new $compiler_class();
+		
+		$compiler->add_files($this->js);
+		
 		return sha1(time()) . '.min.js';
 	}
 	
