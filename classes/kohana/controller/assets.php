@@ -47,12 +47,6 @@ class Kohana_Controller_Assets extends Controller
 			break;
 		}
 		
-		// print_r($headers);
-		
-		// $this->response->headers($headers);
-		
-		// print_r($this->response->headers()); exit;
-		
 		$this->response->body(file_get_contents($path));
 	}
 }
