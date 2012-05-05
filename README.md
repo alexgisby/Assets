@@ -15,10 +15,7 @@ gzipping them.
 
 ## How does it do it?
 
-Assets uses the fantastic [JShrink PHP Library](http://code.google.com/p/jshrink-/) to minify Javascript.
-Will probably expand to use YUI compressor if Java is available at a later date.
-
-Uses it's own custom CSS minifier which strips comments and whitespace.
+Using compressors. Google Closure and YUI are included or you can extend it to use other kinds.
 
 # Under Construction
 
