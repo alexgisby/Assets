@@ -14,6 +14,11 @@
 class Assets_HTML extends Kohana_HTML
 {
 	/**
+	 * @var 	Assets 		Instance of the Assets class used to combine and minify.
+	 */
+	protected static $_assets;
+	
+	/**
 	 * Creates a style sheet link element.
 	 *
 	 *     echo HTML::style('media/css/screen.css');
@@ -30,7 +35,9 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function style($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		return parent::style($file, $attributes, $protocol, $index);
+		self::construct_assets();
+		self::$_assets->add($file);
+		// return parent::style($file, $attributes, $protocol, $index);
 	}
 	
 	/**
@@ -50,6 +57,39 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function script($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		return parent::script($file, $attributes, $protocol, $index);
+		self::construct_assets();
+		self::$_assets->add($file);
+		// return parent::script($file, $attributes, $protocol, $index);
+	}
+	
+	/**
+	 * Compiles CSS files and generates the <link rel> tag to output.
+	 *
+	 * @return 	string
+	 */
+	public static function compiled_css()
+	{
+		return self::$_assets->compile_css();
+	}
+	
+	/**
+	 * Compiles JS files and generates the <script> tag to output.
+	 *
+	 * @return 	string
+	 */
+	public static function compiled_js()
+	{
+		return self::$_assets->compile_js();
+	}
+	
+	/**
+	 * Creates the Assets instance if it hasn't been already.
+	 */
+	public static function construct_assets()
+	{
+		if(!isset(self::$_assets) || !self::$_assets instanceof Assets)
+		{
+			self::$_assets = new Assets();
+		}
 	}
 }

@@ -1,7 +1,5 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-require_once Kohana::find_file('vendor', 'jshrink.class');
-
 /**
  * Assets Class. This class will automatically combine and minify CSS and Javascript files.
  *
@@ -72,5 +70,24 @@ class Kohana_Assets
 		}
 	}
 	
+	/**
+	 * Compile the CSS files and return the filename of the output.
+	 *
+	 * @return 	string 	Filename of the output css.
+	 */
+	public function compile_css()
+	{
+		return sha1(time()) . '.min.css';
+	}
+	
+	/**
+	 * Compile the JS files and return the filename of the output.
+	 *
+	 * @return 	string 	Filename of the output JS.
+	 */
+	public function compile_js()
+	{
+		return sha1(time()) . '.min.js';
+	}
 	
 }
