@@ -79,7 +79,8 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function compiled_js()
 	{
-		return self::$_assets->compile_js();
+		return parent::script(self::$_assets->url_for_asset(self::$_assets->compile_js()));
+		// return self::$_assets->compile_js();
 	}
 	
 	/**

@@ -111,16 +111,47 @@ class Kohana_Assets
 	/**
 	 * Compile the JS files and return the filename of the output.
 	 *
+	 * @param 	array 	Options
 	 * @return 	string 	Filename of the output JS.
 	 */
-	public function compile_js()
+	public function compile_js(array $options = array())
 	{
-		$compiler_class = 'Compiler_' . $this->config->css['compiler'];
-		$compiler = new $compiler_class();
+		// Generate a filename for this lot:
+		$filename = '';
+		foreach($this->js as $file)
+		{
+			$filename .= $file . '--' . @filemtime($file);
+		}
 		
-		$compiler->add_files($this->js);
+		$filename = sha1($filename) . '.min.js';
+		$fullpath = self::cache_dir() . '/' . $filename;
+
+		// Check the cache:
+		self::check_cache_dir();
+		if(!file_exists($fullpath))
+		{
+			// Doesn't exist, COMPILE ME BABY!
+			$compiler_class = 'Compiler_' . $this->config->js['compiler'];
+			$compiler = new $compiler_class();
+			
+			$c_jar = $this->config->js['compiler'] . '_jar';
+			$compiler->set_compiler_path($this->config->$c_jar);
+
+			$compiler->add_files($this->js);
+			$compiler->set_options(arr::merge($this->config->js['compiler_args'], $options));
+			
+			$compiler->compile($fullpath);
+		}
 		
-		return sha1(time()) . '.min.js';
+		return $filename;
+		
+		
+		// $compiler_class = 'Compiler_' . $this->config->css['compiler'];
+		// 		$compiler = new $compiler_class();
+		// 		
+		// 		$compiler->add_files($this->js);
+		// 		
+		// 		return sha1(time()) . '.min.js';
 	}
 	
 	
@@ -176,9 +207,10 @@ class Kohana_Assets
 	 *
 	 * @param 	string 	Filename. If null, will create a temp name.
 	 * @param 	string 	File contents.
+	 * @param 	mixed 	Permissions (chmod) for the file to be written to
 	 * @return 	string 	Filename written to.
 	 */
-	public static function cache_file($filename = null, $file_contents)
+	public static function cache_file($filename = null, $file_contents, $perms = 0444)
 	{
 		if(!self::check_cache_dir())
 			throw new Kohana_Exception('Could not write to cache dir: ' . self::cache_dir());
@@ -193,6 +225,7 @@ class Kohana_Assets
 		}
 		
 		file_put_contents($filename, $file_contents);
+		chmod($filename, $perms);
 		return $filename;
 	}
 }

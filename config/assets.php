@@ -37,6 +37,13 @@ return array(
 		 * Compressor. Yui and Google Closure are supported out the box.
 		 */
 		'compiler' => 'closure',
+		
+		/**
+		 * Compiler arguments to send on (Closure for example)
+		 */
+		'compiler_args' => array(
+			
+		),
 	),
 	
 	

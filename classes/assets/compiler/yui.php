@@ -19,8 +19,9 @@ class Assets_Compiler_Yui extends Assets_Compiler
 	 */
 	public function compile($filename)
 	{
+		$pathinfo = pathinfo($filename);
 		$this->set_options(array(
-			'--type'	=> 'css',
+			'--type'	=> $pathinfo['extension'],
 			'-o' 		=> $filename
 		));
 		

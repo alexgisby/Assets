@@ -60,7 +60,7 @@ abstract class Kohana_Assets_Compiler
 			$full_file .= file_get_contents($file);
 		}
 		
-		return Assets::cache_file(null, $full_file);
+		return Assets::cache_file(null, $full_file, 0444);
 	}
 	
 	
