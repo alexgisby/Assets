@@ -20,6 +20,7 @@ Assets are compiled on the fly, and if you're using Kohana's HTML helper to rend
 - PHP to have shell_exec() permission
 - Java on host machine (to run compilers)
 - Both .jar compiler files to have exec permissions (most errors will come from that)
+- **Good quality JS and CSS!** : Your CSS and Javascript should pass validation / JSLint. If they don't, the compilers will throw warnings. **Twitter Bootstrap will not compile for this reason!**
 
 ## How does it do it?
 
@@ -72,6 +73,14 @@ Yeah sure, the compilers are designed to be plug-and-play, so check out the sour
 ## More documentation?
 
 Sorry, the module is a bit sparse on docs at the moment, all the classes are fully PHPDoc'd so use the userguide API browser.
+
+## Known Issues
+
+There are a few gotcha's to be aware of:
+
+- Twitter Bootstrap: Javascript will *not* compile under Closure. This is due to their style of writing JS not being supported by Closure. Use YUI instead.
+- Icon paths: If you're using non-absolute paths for icons in CSS (looking at you Bootstrap again), they will break.
+- Make sure your code passes validation and JSLint to avoid nasty surprises.
 
 ## License
 
