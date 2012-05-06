@@ -50,6 +50,8 @@ the module will combine and compile all those files in one go.
 On subsequent page renders, the module will only recompile the assets if something has changed, meaning you only incur a performance hit on
 the first page load by the first person to hit the new resources.
 
+Note: external files (those that are :// files like jQuery from Google CDN) will **not** be included, as users are likely to have them cached already.
+
 ## How the files are served
 
 The files are served through a controller so as to add far-future expiration headers to the content. See the init.php file for the Route.
