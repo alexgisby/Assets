@@ -46,6 +46,11 @@ return array(
 		),
 	),
 	
+	/**
+	 * Compile on dev or not.
+	 * Generally speaking, you won't want to compile on dev all the time, so leave this false.
+	 */
+	'compile_on_dev' => false,
 	
 	/**
 	 * Path to YUI compressor within a vendor/ folder.

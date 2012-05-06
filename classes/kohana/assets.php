@@ -71,6 +71,23 @@ class Kohana_Assets
 	}
 	
 	/**
+	 * Whether the assets will be compiled down or not.
+	 * If you're on dev, it won't compile (unless you set the config compile_on_dev as true)
+	 * Everywhere else it will.
+	 *
+	 * @return 	bool
+	 */
+	public static function will_compile()
+	{
+		if(kohana::$environment == kohana::DEVELOPMENT)
+		{
+			return kohana::$config->load('assets.compile_on_dev');
+		}
+		
+		return true;
+	}
+	
+	/**
 	 * Compile the CSS files and return the filename of the output.
 	 *
 	 * @param 	array 	Options for the compiler. Overrides those in the config file.
@@ -144,14 +161,6 @@ class Kohana_Assets
 		}
 		
 		return $filename;
-		
-		
-		// $compiler_class = 'Compiler_' . $this->config->css['compiler'];
-		// 		$compiler = new $compiler_class();
-		// 		
-		// 		$compiler->add_files($this->js);
-		// 		
-		// 		return sha1(time()) . '.min.js';
 	}
 	
 	

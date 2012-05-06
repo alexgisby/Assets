@@ -35,9 +35,16 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function style($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		self::construct_assets();
-		self::$_assets->add($file);
-		// return parent::style($file, $attributes, $protocol, $index);
+		if(Assets::will_compile())
+		{
+			self::construct_assets();
+			self::$_assets->add($file);
+			return '';
+		}
+		else
+		{
+			return parent::style($file, $attributes, $protocol, $index);
+		}
 	}
 	
 	/**
@@ -57,9 +64,15 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function script($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		self::construct_assets();
-		self::$_assets->add($file);
-		// return parent::script($file, $attributes, $protocol, $index);
+		if(Assets::will_compile())
+		{
+			self::construct_assets();
+			self::$_assets->add($file);
+		}
+		else
+		{
+			return parent::script($file, $attributes, $protocol, $index);
+		}
 	}
 	
 	/**
@@ -69,7 +82,12 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function compiled_css()
 	{
-		return parent::style(self::$_assets->url_for_asset(self::$_assets->compile_css()));
+		if(Assets::will_compile())
+		{
+			return parent::style(self::$_assets->url_for_asset(self::$_assets->compile_css()));
+		}
+		
+		return '';
 	}
 	
 	/**
@@ -79,8 +97,12 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function compiled_js()
 	{
-		return parent::script(self::$_assets->url_for_asset(self::$_assets->compile_js()));
-		// return self::$_assets->compile_js();
+		if(Assets::will_compile())
+		{
+			return parent::script(self::$_assets->url_for_asset(self::$_assets->compile_js()));
+		}
+		
+		return '';
 	}
 	
 	/**
