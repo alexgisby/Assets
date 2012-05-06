@@ -37,7 +37,7 @@ class Assets_HTML extends Kohana_HTML
 	{
 		self::construct_assets();
 		self::$_assets->add($file);
-		return parent::style($file, $attributes, $protocol, $index);
+		// return parent::style($file, $attributes, $protocol, $index);
 	}
 	
 	/**

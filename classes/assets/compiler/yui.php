@@ -21,10 +21,13 @@ class Assets_Compiler_Yui extends Assets_Compiler
 	{
 		$this->set_options(array(
 			'--type'	=> 'css',
-			'-o' 	=> $filename
+			'-o' 		=> $filename
 		));
 		
-		$cmd = 'java -jar ' . escapeshellarg($this->compiler_path) . ' ' . $this->compile_options() . ' ' . escapeshellarg($this->files[0]);
+		// Combine the file down:
+		$tmpfile = $this->combine_files();
+		
+		$cmd = 'java -jar ' . escapeshellarg($this->compiler_path) . ' ' . $this->compile_options() . ' ' . escapeshellarg($tmpfile);
 		$output = shell_exec($cmd);
 		
 		if($output != NULL)
@@ -32,6 +35,9 @@ class Assets_Compiler_Yui extends Assets_Compiler
 			// Something went wrong.
 			throw new Kohana_Exception('YUI failed with message: ' . $output);
 		}
+		
+		// Kill the tmp file to be tidy:
+		unlink($tmpfile);
 		
 		return $this;
 	}

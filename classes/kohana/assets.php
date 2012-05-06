@@ -171,4 +171,28 @@ class Kohana_Assets
 		return file_exists(self::cache_dir()) && is_writable(self::cache_dir());
 	}
 	
+	/**
+	 * Caches a file into the assets cache space. The compilers don't need this, but combining files does.
+	 *
+	 * @param 	string 	Filename. If null, will create a temp name.
+	 * @param 	string 	File contents.
+	 * @return 	string 	Filename written to.
+	 */
+	public static function cache_file($filename = null, $file_contents)
+	{
+		if(!self::check_cache_dir())
+			throw new Kohana_Exception('Could not write to cache dir: ' . self::cache_dir());
+		
+		if($filename === NULL)
+		{
+			$filename = tempnam(self::cache_dir(), 'combined');
+		}
+		else
+		{
+			$filename = self::cache_dir() . '/' . $filename;
+		}
+		
+		file_put_contents($filename, $file_contents);
+		return $filename;
+	}
 }

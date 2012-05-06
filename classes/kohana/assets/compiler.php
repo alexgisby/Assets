@@ -47,6 +47,24 @@ abstract class Kohana_Assets_Compiler
 	}
 	
 	/**
+	 * Combines all the files together to make a single file to compress with the compiler.
+	 *
+	 * @return 	string 	Path to the combined files.
+	 * @uses 	Assets::cache_file()
+	 */
+	public function combine_files()
+	{
+		$full_file = '';
+		foreach($this->files as $file)
+		{
+			$full_file .= file_get_contents($file);
+		}
+		
+		return Assets::cache_file(null, $full_file);
+	}
+	
+	
+	/**
 	 * -------------------- Compiler Operations ---------------------
 	 */
 	
