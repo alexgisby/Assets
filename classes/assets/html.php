@@ -35,9 +35,10 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function style($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		if(Assets::will_compile())
+		self::construct_assets();
+		
+		if(strpos($file, '://') === FALSE && Assets::will_compile())
 		{
-			self::construct_assets();
 			self::$_assets->add($file);
 			return '';
 		}
@@ -64,9 +65,10 @@ class Assets_HTML extends Kohana_HTML
 	 */
 	public static function script($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		if(Assets::will_compile())
+		self::construct_assets();
+		
+		if(strpos($file, '://') === FALSE && Assets::will_compile())
 		{
-			self::construct_assets();
 			self::$_assets->add($file);
 		}
 		else
